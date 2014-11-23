@@ -1,5 +1,5 @@
 # Site settings
-baseurl: ""
+baseurl: "/vbouk"
 
 # Build settings
 markdown: redcarpet
