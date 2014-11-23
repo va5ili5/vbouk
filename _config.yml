@@ -1,3 +1,6 @@
-markdown:redcarpet
-baseurl:/vbouk
-exclude:['README.md']
+# Site settings
+baseurl: ""
+
+# Build settings
+markdown: redcarpet
+highlighter: pygments
