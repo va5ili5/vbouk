@@ -2,3 +2,52 @@
 layout: default
 priority: 1.0
 ---
+
+<div class="page-content">
+  <h1 class="page-heading">Archive</h1>
+  <ul class="post-list">
+    {% for post in paginator.posts %}
+      <li>
+        <span class="page-post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">  {{ post.title }}</a>
+        </h2>
+        <p>
+    		  {{post.description}}
+        </p>
+        <a class="post-rest" href="{{ post.url | prepend: site.baseurl }}">Read More</a>    
+      </li>
+    {% endfor %}
+  </ul>
+    <div class="pagination">
+      <ul>
+     
+          {% if paginator.previous_page %}
+            {% if paginator.previous_page == 1 %}
+             
+            {% else %}
+             
+            {% endif %}
+          {% else %}
+          
+          {% endif %}
+          {% if paginator.page == 1 %}
+          <li><span class="active">1</span></li>
+          {% else %}
+          <li><a href="/">1</a></li>
+          {% endif %}
+        {% for count in (2..paginator.total_pages) %}
+          {% if count == paginator.page %}
+          <li><span class="active">{{ count }}</span></li>
+          {% else %}
+          <li><a href="/page{{ count }}">{{ count }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if paginator.next_page %}
+       
+        {% else %}
+       
+        {% endif %}
+      </ul>
+  </div>
+</div>
