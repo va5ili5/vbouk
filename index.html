@@ -21,17 +21,7 @@ priority: 1.0
   </ul>
     <div class="pagination">
       <ul>
-     
-          {% if paginator.previous_page %}
-            {% if paginator.previous_page == 1 %}
-             
-            {% else %}
-             
-            {% endif %}
-          {% else %}
-          
-          {% endif %}
-          {% if paginator.page == 1 %}
+        {% if paginator.page == 1 %}
           <li><span class="active">1</span></li>
           {% else %}
           <li><a href="{{site.baseurl}}/">1</a></li>
@@ -43,11 +33,6 @@ priority: 1.0
           <li><a href="{{site.baseurl}}/page{{ count }}">{{ count }}</a></li>
           {% endif %}
         {% endfor %}
-        {% if paginator.next_page %}
-       
-        {% else %}
-       
-        {% endif %}
       </ul>
   </div>
 </div>

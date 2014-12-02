@@ -188,37 +188,6 @@ table {
   .highlight .il {
     color: #099; }
 
-.ribbon {
-  background-color: #eee;
-  overflow: hidden;
-  white-space: nowrap;
-  /* top left corner */
-  position: absolute;
-  right: -45px;
-  top: 30px;
-  /* 45 deg ccw rotation */
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  /* shadow */
-  -webkit-box-shadow: 0 0 10px #111;
-  -moz-box-shadow: 0 0 10px #111;
-  box-shadow: 0 0 10px #111; }
-
-.ribbon a {
-  border: 1px solid #eee;
-  color: #fff;
-  display: block;
-  font: bold 81.25% Indie Flower;
-  margin: 1px 0;
-  padding: 10px 50px;
-  text-align: center;
-  text-decoration: none;
-  /* shadow */
-  text-shadow: 0 0 5px #444; }
-
 /* ----- body ----- */
 body {
   font-family: Josefin Sans, Helvetica, Arial, sans-serif;
