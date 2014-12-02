@@ -14,12 +14,12 @@ layout: default
 <div class="pagination">
     {% if page.previous %}
     <div class="previous-post active"> 
-        <a rel="prev" href="{{site.baseurl}}/{{ page.previous.url }}">Previous Post</a>
+        <a rel="prev" href="{{site.baseurl}}{{ page.previous.url }}">Previous Post</a>
     </div>
     {% endif %}
 	{% if page.next %}
 	<div class="next-post active"> 
-    	<a rel="next" href="{{site.baseurl}}/{{ page.next.url }}">Next Post</a>
+    	<a rel="next" href="{{site.baseurl}}{{ page.next.url }}">Next Post</a>
 	</div>
 	{% endif %}
 </div>
