@@ -6,6 +6,12 @@ layout: default
     <h1 class="post-title">{{ page.title }}</h1>
     <p class="post-meta">
      	posted by <span class="highlightText">{{page.author}}</span> in <span class="highlightText">{{page.categories}}</span> on <span class="highlightText">{{ page.date | date: "%b %-d, %Y" }}</span></p>
+      <p class="tags"><i class="fa fa-tags"></i> 
+  {% for tags in page.tags %}
+    <a class="tags" href="{{site.baseurl}}/tags/{{tags}}/">{{tags}}</a>
+  {% endfor %}
+</p>
+    
   </div>
   <article class="post-content">
     {{ content }}
@@ -14,12 +20,12 @@ layout: default
 <div class="pagination">
     {% if page.previous %}
     <div class="previous-post active"> 
-        <a rel="prev" href="{{site.baseurl}}{{ page.previous.url }}">Previous Post</a>
+        <a rel="prev" href="{{site.baseurl}}{{ page.previous.url }}{{ page.previous.url }}">Previous Post</a>
     </div>
     {% endif %}
 	{% if page.next %}
 	<div class="next-post active"> 
-    	<a rel="next" href="{{site.baseurl}}{{ page.next.url }}">Next Post</a>
+    	<a rel="next" href="{{site.baseurl}}{{ page.previous.url }}{{ page.next.url }}">Next Post</a>
 	</div>
 	{% endif %}
 </div>

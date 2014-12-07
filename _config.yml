@@ -5,6 +5,7 @@ baseurl: "/vbouk"
 email: vasiliss_b@hotmail.com
 twitter_username: vasilisdev
 github_username:  va5ili5
+
 # Build settings
 markdown: redcarpet
 highlighter: pygments

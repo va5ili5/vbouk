@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<ul>
+  {% for tags in page.tags %}
+    <li>{{ tags }}</li>
+  {% endfor %}
+</ul>
+
+<div class="page-content">
+<ul class="post-list">
+{% for post in site.tags[page.tag] %}
+    <li>
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">  {{ post.title }}</a>
+        </h2>
+        <span class="page-post-meta">{{ post.date | date: "%B %d, %Y" }}</span>
+  </li>
+{% endfor %}
+</ul>
+</div>

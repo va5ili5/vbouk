@@ -1,4 +1,4 @@
-/* ----- body ----- */
+/* ----- base ----- */
 body{
     font-family: $base-font-family;
     font-size: $base-font-size;
@@ -24,11 +24,30 @@ a {
     }
 }
 
+.highlightText{
+    font-weight: bold;
+    color: $base-link-color;
+    
+}
+
+%clearfix {
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.tags, .tags a {
+    color:$base-link-color;
+}
+
+/* ----- body ----- */
 .body {
     margin: 0 auto;
     width: $base-width;
     @extend %clearfix;
-
     @include media-query($screen-large-breakpoint){
         width:90%;
     }
@@ -45,12 +64,12 @@ a {
     .header-title {
         font-family:$header-font-family;
         font-size: $header-font-size;
+        font-weight: 300;
     }
-
     .header-subtitle{
         float:left;
         font-size: $header-subtitle-font-size;
-        width: 70%;
+        min-width: 100px;
     }
     @include media-query($screen-medium-breakpoint){
         .header-title{
@@ -68,7 +87,6 @@ a {
 /* ----- navigation ------ */
 .navigation-menu {
     float:right;
-
     .page-link {
         font-size: $header-subtitle-font-size;
         color: $base-font-color;
@@ -76,7 +94,6 @@ a {
             margin-left: $base-spacing;
         }
     }
-
     @include media-query($screen-medium-breakpoint) {
         float:none;
         background-color: $base-background-color;
@@ -84,7 +101,8 @@ a {
             text-align: center;
             display: block;
             padding: 5px 10px;
-            background-color:gainsboro;
+            background-color:$base-link-color;
+            color: #fff;
             &:not(:first-child) {
                 margin-left: 0px;
             }
@@ -93,17 +111,14 @@ a {
 }
 
 /* ----- page ----- */
-
 .page-content {
     padding: $base-spacing 0;
-    width: $base-width;
+    width: $page-content-width;
     @extend %clearfix;
-
     .page-heading {
         font-size: $page-heading-font-size;
         margin-bottom: $base-spacing / 2;
     }
-
     @include media-query($screen-large-breakpoint) {
         width: 100%;
     }
@@ -112,17 +127,24 @@ a {
 .post-list {
     list-style: none;
     > li {
+        float: left;
         margin-bottom: $base-spacing;
         border-bottom:1px solid gainsboro;
+        >a{
+            float: right;
+            color:$base-link-color;
+        }
     }
     p{
         font-size: $base-font-size * 1.130;
         padding-bottom: $base-spacing;
     }
+     @extend %clearfix;
 }
 
 .page-post-meta{
     font-size:$post-meta-font-size;
+    font-weight: 300;
     @include media-query($screen-medium-breakpoint) {
         font-size: $base-font-size * 0.800;
     }
@@ -160,7 +182,7 @@ a {
 
 /* ----- about me ----- */
 .about-me{
->p{
+    >p{
         font-size: $base-font-size * 1.130;
         padding-bottom: $base-spacing;
     }
@@ -174,7 +196,6 @@ a {
         font-size: $base-font-size;
         @include media-query($screen-large-breakpoint) {
             margin: 0px 10px;
-            
         }
         @include media-query($screen-medium-breakpoint) {
             margin: 10px 10px;
@@ -208,22 +229,22 @@ a {
         }
     }
      @extend %clearfix;
-    
 }
 
 .active{
-        display: block;
-        line-height: 100%;
-        text-align: center;
-        padding: 7px 10px;
-        font-size: 14px;
-        -webkit-transition: all 300ms;
-        -o-transition: all 300ms;
-        transition: all 300ms;
-        border-color: gainsboro;
-        background: gainsboro;
-        color: #fff
+    display: block;
+    line-height: 100%;
+    text-align: center;
+    padding: 7px 10px;
+    font-size: 14px;
+    -webkit-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+    border-color: $base-link-color;
+    background: $base-link-color;
+    color: #fff
 }
+
 /* ----- blockquotes ----- */
 blockquote {
     color: $base-font-color;
