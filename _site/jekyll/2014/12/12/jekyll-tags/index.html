@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset = "utf-8">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Vasileios Boukonis Blog</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/vbouk/images/favicon.ico"/>
+	<link href="/vbouk/css/main.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body class="body">
+	<header class="header">
+	<div class="header-title">
+		<a href="/vbouk/">Vasileios Boukonis</a>
+	</div>
+	<div class="header-subtitle">
+		<p>web, codes and coffee</p>
+	</div>
+  	<nav class="navigation-menu">
+      
+        
+          <a class="page-link" href="/vbouk/about/">About Me</a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <a class="page-link" href="/vbouk/projects/">Projects</a>
+        
+      
+</nav>
+</header>
+	<div class="post">
+  <div class="post-header">
+    <h1 class="post-title">Tags in Jekyll</h1>
+    <p class="post-meta">
+     	posted by <span class="highlightText">Boukonis Vasileios</span> in <span class="highlightText">jekyll</span> on <span class="highlightText">Dec 12, 2014</span></p>
+      <p class="tags"><i class="fa fa-tags"></i> 
+  
+    <a class="tags" href="/vbouk/tags/jekyll/">jekyll</a>
+  
+    <a class="tags" href="/vbouk/tags/tags/">tags</a>
+  
+    <a class="tags" href="/vbouk/tags/howto/">howto</a>
+  
+</p>
+    
+  </div>
+  <article class="post-content">
+    <p>If you use Jekyll for first time or you have recently migrated to Jekyll from another blogging system you probably have already noticed that the standard Jekyll installation doesn&#39;t provide any build in mechanism to generate tag pages that contains list of posts with specified tag. You can solve this problem by writing your own custom plugin but if you want to host your blog on GitHub pages then, for security reasons, GitHub will disable it. A workaround as referenced in <a href="http://jekyllrb.com/docs/plugins/" target="_blank">Jekyll&#39;s documentation</a> is to build your website locally and push the generated files included in <code>_site</code> folder to your repository. Searching the internet I found that there are other workarounds to the problem without using plugins. Im my blog I wanted for each tag to create a separate page to display all the post matcing the selected tag. To do this we need to create a new folder called tags in the site&#39;s root directory. </p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">root</span>
+    <span class="n">tags</span></code></pre></div>
+
+<p>Inside this folder we add new folders for the tags. So for instance if we want to have a <code>jekyll</code> and <code>howto</code> tag we add two new folders inside the <code>tags</code> folder with the names <code>jekyll</code> and <code>howto</code> like so</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">root</span>
+    <span class="n">tags</span>
+        <span class="n">jekyll</span>
+        <span class="n">howto</span></code></pre></div>
+
+<p>Now that we have our folders set, we add a page in each folder. This page will be used to display the posts. For instance if we want to display all the posts tagged by <code>jekyll</code>we will use this page to display them. We name this page <code>index.html</code> and in the YAML front-matter we declare two variables. The layout and the tag. The layout variable contains the name of the layout to be used and the tag variable contains the tag value for this spacific post. For the <code>jekyll</code> tag the page will be:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">---</span>
+<span class="ss">layout</span><span class="p">:</span> <span class="n">tagtemplate</span>
+<span class="ss">tag</span><span class="p">:</span> <span class="n">jekyll</span>
+<span class="o">---</span></code></pre></div>
+
+<p>and for the <code>howto</code> tag:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">---</span>
+<span class="ss">layout</span><span class="p">:</span> <span class="n">tagtemplate</span>
+<span class="ss">tag</span><span class="p">:</span> <span class="n">howto</span>
+<span class="o">---</span></code></pre></div>
+
+<p>So now we have the required files the folders ready we can continue to implement the layout. In <code>_layouts</code> folder we create a new layout page called e.g. <code>tagtemplate.html</code>. For my blog this is the layout:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">---
+layout: default
+---
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-content&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;page-heading&quot;</span><span class="nt">&gt;</span>Posts tagged by &quot;{{ page.tag }}&quot;<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;post-list&quot;</span><span class="nt">&gt;</span>
+    {% for post in site.tags[page.tag] %}
+        <span class="nt">&lt;li&gt;</span>
+            <span class="nt">&lt;h2&gt;</span>
+                <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;post-link&quot;</span> <span class="na">href=</span><span class="s">&quot;{{ post.url | prepend: site.baseurl }}&quot;</span><span class="nt">&gt;</span>  {{ post.title }}<span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/h2&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;page-post-meta&quot;</span><span class="nt">&gt;</span>{{ post.date | date: &quot;%B %d, %Y&quot; }}<span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/li&gt;</span>
+    {% endfor %}
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>First we display the name of the tag in <code>&lt;h1&gt;&lt;/h1&gt;</code> tags. The for loop iterates all the posts with that tags and prints a list of posts. Each post in this list contains the post title and the meta-data. We make the post title a link so we can easily go back to the original post.</p>
+
+<p>Now we are ready to create a post using tags. In the YAML front-matter we add a tags variable and we asign values. For example a post tagged by <code>jekyll</code> and <code>howto</code> the front-matter will be:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">tags:
+- jekyll
+- tags</code></pre></div>
+
+<p>The last think we need to do is to include the tags (as links) in our <code>index.htm</code> file and in the posts layout. For this we need another for loop to loop through the post tags and display the tag name.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">/* index.html */
+{% for tags in post.tags %}
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;tags&quot;</span> <span class="na">href=</span><span class="s">&quot;{{base.url}}/tags/{{tags}}/&quot;</span><span class="nt">&gt;</span>{{tags}}<span class="nt">&lt;/a&gt;</span>
+  {% endfor %}</code></pre></div>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">/* post.html */
+{% for tags in page.tags %}
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;tags&quot;</span> <span class="na">href=</span><span class="s">&quot;{{site.baseurl}}/tags/{{tags}}&quot;</span><span class="nt">&gt;</span>{{tags}}<span class="nt">&lt;/a&gt;</span>
+  {% endfor %}</code></pre></div>
+
+<p>That&#39;s it now we have for each tag a page to display a list with all the posts tagged by that tag. You can check my <a href="//github.com/va5ili5/vbouk" target="_blank">GitHub repository</a>.</p>
+
+  </article>
+</div>
+<div class="pagination">
+    
+	
+</div>
+	<footer class="footer">
+	<p>Copyright &copy Boukonis Vasileios 2014 | Powered by <a href="//jekyllrb.com" target="_blank"><span class="highlightText">Jekyll</span></a> | Hosted on <a href="//github.com" target="_blank"><span class="highlightText">GitHub</span></a></p>
+	<a href="mailto:vasiliss_b@hotmail.com"><i class="fa fa-envelope"></i></a>
+	<a href="//github.com/va5ili5" target="_blank"><i class="fa fa-github"></i></a>
+	<a href="//twitter.com/vasilisdev" target="_blank"><i class="fa fa-twitter"></i></a>
+</footer>
+</body>
+</html>

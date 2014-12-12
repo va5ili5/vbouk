@@ -206,7 +206,8 @@ a {
   clear: both; }
 
 .tags, .tags a {
-  color: crimson; }
+  color: crimson;
+  font-size: 16px; }
 
 /* ----- body ----- */
 .body {
@@ -277,7 +278,8 @@ a {
   .post-list > li {
     float: left;
     margin-bottom: 30px;
-    border-bottom: 1px solid gainsboro; }
+    border-bottom: 1px solid gainsboro;
+    width: 100%; }
     .post-list > li > a {
       float: right;
       color: crimson; }
@@ -312,6 +314,10 @@ a {
     font-size: 64%; }
   .post .post-content {
     margin-bottom: 30px; }
+    .post .post-content a {
+      color: crimson; }
+      .post .post-content a:hover {
+        text-decoration: underline; }
 
 /* ----- about me ----- */
 .about-me > p {

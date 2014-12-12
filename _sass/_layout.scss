@@ -27,7 +27,6 @@ a {
 .highlightText{
     font-weight: bold;
     color: $base-link-color;
-    
 }
 
 %clearfix {
@@ -39,8 +38,9 @@ a {
     }
 }
 
-.tags, .tags a {
+.tags, .tags a{
     color:$base-link-color;
+    font-size: 16px;
 }
 
 /* ----- body ----- */
@@ -130,6 +130,7 @@ a {
         float: left;
         margin-bottom: $base-spacing;
         border-bottom:1px solid gainsboro;
+        width: 100%;
         >a{
             float: right;
             color:$base-link-color;
@@ -177,6 +178,12 @@ a {
     }
     .post-content {
         margin-bottom: $base-spacing;
+        a{
+            color:$base-link-color;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
     }
 }
 
@@ -191,7 +198,6 @@ a {
 /* ----- footer ----- */
 .footer{
     text-align: center;
-    margin-bottom:$base-spacing;
     .fa{
         margin-left: 5px;
         font-size: $base-font-size;
