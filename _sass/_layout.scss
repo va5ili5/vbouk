@@ -162,7 +162,7 @@ a {
     width: $base-width;
     @extend %clearfix;
     @include media-query($screen-large-breakpoint) {
-        width: $base-width * 1.250;
+        width: 100%;
     }
     .post-header {
         font-size: $page-heading-font-size;
