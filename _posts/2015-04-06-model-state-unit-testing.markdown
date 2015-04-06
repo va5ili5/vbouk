@@ -163,4 +163,4 @@ public void Multiple_Validation_Errors()
 {% endraw %}
 {% endhighlight %}
 
-The source code is available at <a href="https://github.com/va5ili5/WebApi.ModelStateUnitTesting">github</a>
+The source code is available at <a href="https://github.com/va5ili5/WebApi.ModelStateUnitTesting" target="_blank">github</a>
