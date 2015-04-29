@@ -14,7 +14,7 @@ priority: 1.0
         </h2>
          <p class="tags"><i class="fa fa-tags"></i> 
   {% for tags in post.tags %}
-    <a class="tags" href="{{site.baseurl}}/tags/{{tags}}/">{{tags}}</a>
+    <a class="tags" href="{{site.baseurl}}/tags/{{tags | replace: 'C#', 'CSharp'}}/">{{tags | replace: 'CSharp', 'C#'}}</a>
   {% endfor %}
 </p>
          
