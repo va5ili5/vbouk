@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset = "utf-8">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Vasileios Boukonis Blog</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/vbouk/images/favicon.ico"/>
+	<link href="/vbouk/css/main.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-57414704-1', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</head>
+
+<body class="body">
+	<header class="header">
+	<div class="header-title">
+		<a href="/vbouk/">Vasileios Boukonis</a>
+	</div>
+	<div class="header-subtitle">
+		<p>web, codes and coffee</p>
+	</div>
+  	<nav class="navigation-menu">
+      
+        
+          <a class="page-link" href="/vbouk/about/">About Me</a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <a class="page-link" href="/vbouk/resume/">Resume</a>
+        
+      
+</nav>
+</header>
+	<div class="post">
+  <div class="post-header">
+    <h1 class="post-title">Unit Test Model State in ASP.NET WebApi</h1>
+    <p class="post-meta">
+      posted by <span class="highlightText">Boukonis Vasileios</span> in <span class="highlightText">unittest</span> on <span class="highlightText">Apr 6, 2015</span></p>
+      <p class="tags"><i class="fa fa-tags"></i> 
+  
+    <a class="tags" href="/vbouk/tags/WebApi">WebApi</a>
+  
+    <a class="tags" href="/vbouk/tags/CSharp">C#</a>
+  
+</p>
+    
+  </div>
+  <article class="post-content">
+    <p>For the past few days I was writing an ASP.NET Api and I wanted to write some unit tests to test if the model passed to the controller action is valid. Seems a trivial task ...but it&#39;s not. Let&#39;s create a WebApi Controller called Register with Action Register and a model called Customer with some validations</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">public class RegisterController : ApiController
+{
+    public IHttpActionResult Register(Customer customer)
+    {
+        return Ok();
+    }
+}
+
+public class Customer
+{
+    [Required]
+    public string FirstName { get; set; }
+
+    [Required]
+    public string LastName { get; set; }
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    [RegularExpression(@&quot;^([a-zA-Z0-9 .<span class="err">&amp;</span>&#39;-]+)$&quot;, ErrorMessage = &quot;Invalid Password&quot;)]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
+
+    [Required]
+    [Compare(&quot;Password&quot;, ErrorMessage = &quot;Password and Confirm Password do not match&quot;)]
+    [DataType(DataType.Password)]
+    public string ConfirmPassword { get; set; }
+}</code></pre></div>
+
+<p>now lets write a unit test and pass an invalid model to registrer action. The following test is expected to be succeed but it fails. Even if the model we pass is invalid no validation errors added to the model state dictionary (represented by the ModelState property of the Controller class).</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">public void If_FirstName_Is_Empty_The_Error_Should_Be_The_FirstName_Field_Is_Required()
+{
+    // Arrange
+    var customer = new Customer
+    {
+        FirstName = string.Empty, //invalid. FirstName field is required
+        LastName = &quot;Doe&quot;,
+        Email = &quot;test@mail.com&quot;,
+        Password = &quot;testpass&quot;,
+        ConfirmPassword = &quot;testpass&quot;,
+    };
+
+    //Act
+    var controller = new RegisterController();
+    var actionResult = controller.Register(customer);
+    int count = controller.ModelState.Values.Count; //get the number of errors added to ModelState
+
+    //Assert
+    Assert.IsFalse(controller.ModelState.IsValid);
+    Assert.AreEqual(actionResult, typeof(BadRequestResult));
+    Assert.AreEqual(count, 1);
+    
+}</code></pre></div>
+
+<p>But why? This happens because in the WebApi pipeline the ModelState validity is checked before the execution of the controller action. In the test above the <code>ModeState.IsValid</code> is executed before the <code>Register</code> action and so the model <code>customer</code> is valid. To solve this problem I implemented a new class that inherits from <code>ApiController</code> and in the class constructor I mocked the <code>HttpConfiguration</code> object and I added a validation method. This method just accept a model, validates it and returns any validation errors in the ModelState</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">public class ModelStateValidatorController : ApiController
+{
+    public ModelStateValidatorController()
+    {
+        Configuration = (new Mock<span class="nt">&lt;HttpConfiguration&gt;</span>()).Object;
+    }
+
+    public ModelStateDictionary Validation(object model)
+    {
+        Validate(model);
+        return ModelState;
+    }
+}</code></pre></div>
+
+<p>I&#39;ve also implemented an AssertHelper class for the assertions. This class contains the assertion functions</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">public static class AssertHelper
+{
+    public static void assertModelState(ModelStateDictionary modelState, string key, string errorMessage)
+    {
+        Assert.IsTrue(modelState.ContainsKey(key));
+        Assert.IsTrue(modelState[key].Errors.Count == 1);
+        Assert.IsTrue(modelState[key].Errors[0].ErrorMessage == errorMessage);
+    }
+
+    //overload. use this in case of multiple error per key
+    public static void assertModelState(ModelStateDictionary modelState, string key, string[] errorMessage)
+    {
+        Assert.IsTrue(modelState.ContainsKey(key));
+        for (int errorIndex = 0; errorIndex <span class="nt">&lt; errorMessage.Length</span><span class="err">;</span> <span class="na">errorIndex</span><span class="err">++)</span>
+        <span class="err">{</span>
+            <span class="na">Assert</span><span class="err">.</span><span class="na">IsTrue</span><span class="err">(</span><span class="na">modelState</span><span class="err">[</span><span class="na">key</span><span class="err">].</span><span class="na">Errors</span><span class="err">.</span><span class="na">Count =</span><span class="s">=</span> <span class="na">errorMessage</span><span class="err">.</span><span class="na">Length</span><span class="err">);</span>
+            <span class="na">Assert</span><span class="err">.</span><span class="na">IsTrue</span><span class="err">(</span><span class="na">modelState</span><span class="err">[</span><span class="na">key</span><span class="err">].</span><span class="na">Errors</span><span class="err">[</span><span class="na">errorIndex</span><span class="err">].</span><span class="na">ErrorMessage =</span><span class="s">=</span> <span class="na">errorMessage</span><span class="err">[</span><span class="na">errorIndex</span><span class="err">]);</span>
+        <span class="err">}</span>
+    <span class="err">}</span>
+<span class="err">}</span></code></pre></div>
+
+<p>The overloaded function can be used in cases where multiple validation errors occured for the same property. Here is a use example</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">//combination of validation errors
+[TestMethod]
+public void Multiple_Validation_Errors()
+{
+    // Arrange
+    var customer = new Customer
+    {
+        FirstName = string.Empty, //validation error
+        LastName = string.Empty,  //validation error
+        Email = string.Empty,     //two validation errors for the same property
+        Password = &quot;testpass&quot;,
+        ConfirmPassword = &quot;testpass&quot;,
+    };
+
+    // Act
+    var modelState = new ModelStateValidatorController().Validation(customer);
+
+    //testing keep the errors sum
+    int countError = modelState.Select(x =&gt; x.Value.Errors.Count).Sum();
+
+    //one validation error per key
+    AssertHelper.assertModelState(modelState, &quot;FirstName&quot;, &quot;The FirstName field is required.&quot;);
+    AssertHelper.assertModelState(modelState, &quot;LastName&quot;, &quot;The LastName field is required.&quot;);
+
+    //multiple validation errors for one key. calls the overloaded function
+    AssertHelper.assertModelState(modelState, &quot;Email&quot;, new[]
+    {
+        &quot;The Email field is required.&quot;,
+        &quot;The Email field is not a valid e-mail address.&quot;
+    });
+}</code></pre></div>
+
+<p>The source code is available at <a href="https://github.com/va5ili5/WebApi.ModelStateUnitTesting" target="_blank">github</a></p>
+
+  </article>
+</div>
+<div class="pagination">
+    
+    <div class="previous-post active"> 
+        <a rel="prev" href="/jekyll/2014/12/12/jekyll-tags/">Previous Post</a>
+    </div>
+    
+  
+</div>
+	<footer class="footer">
+	<p>Designed & Developed by Boukonis Vasileios 2014 | Powered by <a href="//jekyllrb.com" target="_blank"><span class="highlightText">Jekyll</span></a> | Hosted on <a href="//github.com" target="_blank"><span class="highlightText">GitHub</span></a></p>
+	<a href="mailto:vasiliss_b@hotmail.com"><i class="fa fa-envelope"></i></a>
+	<a href="//github.com/va5ili5" target="_blank"><i class="fa fa-github"></i></a>
+	<a href="//twitter.com/vasilisdev" target="_blank"><i class="fa fa-twitter"></i></a>
+</footer>
+</body>
+</html>
