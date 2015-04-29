@@ -379,6 +379,9 @@ a {
   .page-resume .bioarticle .dates {
     display: inline-block;
     float: right; }
+    @media screen and (max-width: 899px) {
+      .page-resume .bioarticle .dates {
+        float: none; } }
   .page-resume .bioarticle .bioarticleinner {
     margin-bottom: 10px;
     padding-bottom: 5px; }

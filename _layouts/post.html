@@ -8,7 +8,7 @@ layout: default
       posted by <span class="highlightText">{{page.author}}</span> in <span class="highlightText">{{page.categories}}</span> on <span class="highlightText">{{ page.date | date: "%b %-d, %Y" }}</span></p>
       <p class="tags"><i class="fa fa-tags"></i> 
   {% for tags in page.tags %}
-    <a class="tags" href="{{site.baseurl}}/tags/{{tags | replace: 'C#', 'CSharp'}}">{{tags | replace: 'CSharp', 'C#'}}</a>
+    <a class="tags" href="{{site.baseurl}}/tags/{{tags | replace: 'CSharp', 'C#'}}">{{tags | replace: 'CSharp', 'C#'}}</a>
   {% endfor %}
 </p>
     
