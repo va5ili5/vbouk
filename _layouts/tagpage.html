@@ -4,7 +4,7 @@ layout: default
 
 
 <div class="page-content">
-	<h1 class="page-heading">Posts tagged by "{{ page.tag }}"</h1>
+	<h1 class="page-heading">Posts tagged by "{{ page.tag | replace: 'CSharp', 'C#' }}"</h1>
 	<ul class="post-list">
 	{% for post in site.tags[page.tag] %}
 		<li>
