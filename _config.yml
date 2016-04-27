@@ -7,7 +7,6 @@ twitter_username: vasilisdev
 github_username:  va5ili5
 
 # Build settings
-markdown: redcarpet
 highlighter: rouge
 permalink: pretty
 paginate : 10
