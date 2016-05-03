@@ -11,7 +11,7 @@ categories: Unit Test
 ---
 
 
-For the past few days I was writing an ASP.NET Api and I wanted to write some unit tests to test if the model passed to the controller action is valid. Seems a trivial task ...but it's not. Let's create a WebApi Controller called Register with Action Register and a model called Customer with some validations
+In this post I'm going to show how to test if the model passed to the controller action is valid. Let's create a WebApi Controller called Register with Action Register and a model called Customer with some validations
 
 {% highlight html %}
 {% raw %}
