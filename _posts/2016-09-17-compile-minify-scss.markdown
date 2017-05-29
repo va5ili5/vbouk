@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Compile and minify sass in ASP.NET Core"
+title:  "Using Gulp with ASP.NET Core in Visual Studio 2017 CE"
 description: "compiling, minifing and concatenate sass files to css in visual studio using gulp"
 date:   2016-09-17
 author: Boukonis Vasileios
